@@ -6,6 +6,7 @@ execute:
 ---
 
 ```{r}
+#| include: false
 #| message: false
 library(tidyverse)
 library(purrr)
@@ -14,6 +15,7 @@ library(jsonlite)
 ```
 
 ```{r}
+#| include: false
 raw <- fromJSON("data/wildfires.geojson", simplifyVector = FALSE)
 cat("Number of features:", length(raw$features), "\n")
 
@@ -23,6 +25,7 @@ first_fire$geometry$coordinates[[1]][[1]]
 ```
 
 ```{r}
+#| include: false
 #| cache: true
 wildfires <- tibble(features = raw$features) |>
   unnest_wider(features) |>
@@ -38,6 +41,7 @@ fires <- wildfires |>
 ```
 
 ```{r}
+#| include: false
 august_fires <- fires |>
   filter(str_detect(incident, "\\bAugust\\b"))
 
@@ -49,6 +53,7 @@ fires |>
 ```
 
 ```{r}
+#| include: false
 big_fires <- fires |>
   filter(gis_acres >= 100000)
 
@@ -74,6 +79,8 @@ top_ten_fires <- big_fires |>
 all_lng <- unlist(top_ten_fires$polygon_lng)
 all_lat <- unlist(top_ten_fires$polygon_lat)
 ```
+
+The map shows the boundaries of the ten largest wildfires in the dataset. Click a boundary to see the fire's name, year, and acreage; the view is fitted to show all ten.
 
 ```{r}
 fire_map <- leaflet() |>
